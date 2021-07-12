@@ -1,0 +1,51 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.4.63.48766",
+      "templateHash": "3040037789921956392"
+    }
+  },
+  "parameters": {
+    "Environment": {
+      "type": "string",
+      "allowedValues": [
+        "Test",
+        "Acceptance",
+        "Production"
+      ]
+    },
+    "Location": {
+      "type": "string",
+      "allowedValues": [
+        "West Europe",
+        "North Europe"
+      ]
+    },
+    "FunctionName": {
+      "type": "string"
+    }
+  },
+  "functions": [],
+  "variables": {
+    "envShort": {
+      "Test": "tin",
+      "Acceptance": "acc",
+      "Procuction": "in"
+    },
+    "locShort": {
+      "West Europe": "awe",
+      "North Europe": "ane"
+    },
+    "storageAccountName": "[format('{0}[{1}]', variables('locShort'), parameters('Location'))]"
+  },
+  "resources": [],
+  "outputs": {
+    "stringOutput": {
+      "type": "string",
+      "value": "[variables('storageAccountName')]"
+    }
+  }
+}
