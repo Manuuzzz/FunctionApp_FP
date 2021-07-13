@@ -9,8 +9,9 @@
         "environment": {
             "value": "Production"
         },
-        "functionName": {
-            "value": "PowerBIExtractAuditLogs"
+        
+        "functionAppPlanName": {
+            "value": "ASP-testsa-9f5a"
         },
         "location": {
             "value": "West Europe"
@@ -56,9 +57,19 @@
             },
             "builtInRoleType": {
                 "value": "StorageBlobDataContributor"
-            }
+            },
 
-
+            "fa": {
+                "value":
+                    {
+                        "functionAppName": "powerbeextractauditlogs",
+                        "kind": "functionapp",
+                        "enabled": true,
+                        "containerSize": "1536"
+                        
+                        
+                    }
+                }
         
     }
 }

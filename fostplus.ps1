@@ -24,9 +24,9 @@ function Search-Log {
 
 
         # to use in function app via app settings: $ENV:StorageAccount
-        #$StorageAccountName = $env:StorageAccountName
-        #StorageAccountKey = $env:StorageAccountKey
-        $StorageAccountName = "sapowerbilogs" 
+        $StorageAccountName = $env:StorageAccountName
+        #$StorageAccountKey = $env:StorageAccountKey
+        #$StorageAccountName = "sapowerbilogs" 
         #$StorageAccountKey = ""
         
         $ContainerName = "powerbilogs"
@@ -60,7 +60,7 @@ function Search-Log {
         $sessionName = (get-date -Format 'u')+'pbiauditlog'
         
                 
-        $user_SecureFromKV = Get-AzKeyVaultSecret -VaultName "kvpowerbilogs" -Name "exchangeonlineuser4"
+        $user_SecureFromKV = Get-AzKeyVaultSecret -VaultName "kvpowerbilogs" -Name "exchangeonlineuser"
         #Convert the secure username from the keyvault to plain text, so we can pass it in the credential object
         $User = $user_SecureFromKV.SecretValue | ConvertFrom-SecureString -AsPlainText  
         $PWord = Get-AzKeyVaultSecret -VaultName "kvpowerbilogs" -Name "exchangeonlinepassword"
