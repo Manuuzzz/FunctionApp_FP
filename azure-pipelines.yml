@@ -1,0 +1,87 @@
+name: $(BuildID)
+
+variables:
+  - name: FunctionAppDescriptiveName
+    value: powerbeextractauditlogs-01
+
+  - name: AzureServiceConnection_PROD
+    value: 'awe-in-spn-devops4infra'
+
+  - name: AzureServiceConnection_ACC
+    value: 'awe-acc-spn-devops4infra'
+
+  - name: AzureServiceConnection_TEST
+    value: 'awe-tin-spn-devops4infra'
+
+  - name: RGName_TEST
+    value: awe-tin-rg-bi-01
+
+  - name: RGName_ACC
+    value: awe-acc-rg-bi-01
+
+  - name: RGName_PROD
+    value: awe-in-rg-bi-01
+
+  - name: Location
+    value: westeurope
+
+  - name: PoolName
+    value: IaC-PROD
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - ARMTemplates/Templates/*
+    - ARMTemplates/Parameters/*
+    exclude:
+    - pipelinetemplates/*
+    - fapowerbilogs/*
+  
+
+stages:
+
+# test stage
+- stage: 'armtemplate_test'
+  displayName: 'ARM Template TEST'
+  jobs:
+  - template: pipelinetemplates/functionapparm-template.yml
+    parameters:
+      FunctionAppDescriptiveName: '$(FunctionAppDescriptiveName)'
+      PoolName: '$(PoolName)'
+      RGName: '$(RGName_TEST)'
+      AzureServiceConnection: '$(AzureServiceConnection_TEST)'
+      Location: '$(Location)'
+      environment: 'test'
+
+
+# # acc stage
+# - stage: 'armtemplate_acc'
+#   displayName: 'ARM Template ACC'
+
+#   jobs:
+#   - template: pipelinetemplates/functionapparm-template.yml
+#     parameters:
+#       FunctionAppDescriptiveName: '$(FunctionAppDescriptiveName)'
+#       PoolName: '$(PoolName)'
+#       RGName: '$(RGName_ACC)'
+#       AzureServiceConnection: '$(AzureServiceConnection_ACC)'
+#       Location: '$(Location)'
+#       environment: 'acceptance'
+
+# # production stage
+# - stage: 'armtemplate_prd'
+#   displayName: 'Validate ARM Template PRD'
+
+#   jobs:
+#   - template: pipelinetemplates/functionapparm-template.yml
+#     parameters:
+#       FunctionAppDescriptiveName: '$(FunctionAppDescriptiveName)'
+#       PoolName: '$(PoolName)'
+#       RGName: '$(RGName_PROD)'
+#       AzureServiceConnection: '$(AzureServiceConnection_PROD)'
+#       Location: '$(Location)'
+#       environment: 'production'
+

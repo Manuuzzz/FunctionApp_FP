@@ -1,0 +1,83 @@
+
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "subscriptionId": {
+            "value": "a60f93ce-38a5-4f4e-88c8-43461226d7e4"
+        },
+        "tenantId": {
+            "value": "7102d636-1f2c-4449-9404-79ff05fac66c"
+        },
+        "environment": {
+            "value": "Test"
+        },
+        "functionAppPlanName": {
+            "value": "awe-tinappsvcplan-azfconsumption-01"
+        },
+        
+        "location": {
+            "value": "West Europe"
+        },
+
+        "umi": {
+            "value": "powerbeextractauditlogs"
+            
+        },
+        "rg_functionAppPlan": {
+            "value": "awe-tin-azf-powerbiextractauditlogs-01"
+        },
+
+       "kv": {
+                "value": 
+        
+                {
+                    "skuName": "standard",
+                    "skuFamily": "A",
+                    "enabledForDeployment": false,
+                    "enabledForDiskEncryption": false,
+                    "enabledForTemplateDeployment": true,
+                    "enableSoftDelete": true,
+                    "softDeleteRetentionInDays": 90,
+                    "enableRbacAuthorization": true
+                }
+            },
+            "sta": {
+                "value": 
+    
+                    {
+                        "kind": "StorageV2",
+                        "sku": "Standard_LRS",
+                        "tlsVersion":"TLS1_2",
+                        "blobPublicAccess":true,
+                        "sharedKeyAccess": true,
+                        "defaultAction": "Allow",
+                        "bypass": "AzureServices",
+                        "httpsTrafficOnly": true,
+                        "allowBlobPublicAccess": true,
+                        "accessTier": "Hot",
+                        "allowSharedKeyAccess": true,
+                        "containerDeleteRetentionPolicy": true,
+                        "containerDeleteRetentionPolicyDays": 7,
+                        "deleteRetentionPolicy": true,
+                        "deleteRetentionPolicyDays": 7,
+                        "container1": "powerbilogs",
+                        "container2": "powerbiarchivelogs",
+                        "byPass": "AzureServices"
+                                           
+                    }
+                },
+                "fa": {
+                    "value":
+                        {
+                            "functionAppName": "powerbeextractauditlogs",
+                            "kind": "functionapp",
+                            "enabled": true,
+                            "containerSize": "1536"
+                            
+                            
+                        }
+                    }
+        
+    }
+}

@@ -1,9 +1,8 @@
-﻿#Todo: rotate keys
+# Input bindings are passed in via param block.
+param($Timer)
+#Todo: rotate keys
 
-
-Import-Module ExchangeOnlineManagement #in requirements file
-Import-Module Az.Storage # in run.ps1
-connect-azaccount -SubscriptionId 87c95f9e-1635-4c64-a61e-911d241803a6 #not needed
+import-Module Az.Storage
 
 function Search-Log {
 
@@ -17,17 +16,11 @@ function Search-Log {
         
         )
         
-        $user_SecureFromKV = Get-AzKeyVaultSecret -VaultName "kvpowerbilogs" -Name "exchangeonlineuser5"
-        #Convert the secure username from the keyvault to plain text, so we can pass it in the credential object
-        $User = $user_SecureFromKV.SecretValue | ConvertFrom-SecureString -AsPlainText  
-        $PWord = Get-AzKeyVaultSecret -VaultName "kvpowerbilogs" -Name "exchangeonlinepassword2"
-
+       
 
         # to use in function app via app settings: $ENV:StorageAccount
-        #$StorageAccountName = $env:StorageAccountName
-        #StorageAccountKey = $env:StorageAccountKey
-        $StorageAccountName = "" 
-        $StorageAccountKey = ""
+        $StorageAccountName = $env:StorageAccountName
+           
         
         $ContainerName = "powerbilogs"
         $ArchiveContainerName = "powerbiarchivelogs"
@@ -60,16 +53,16 @@ function Search-Log {
         $sessionName = (get-date -Format 'u')+'pbiauditlog'
         
                 
-        $user_SecureFromKV = Get-AzKeyVaultSecret -VaultName "kvpowerbilogs" -Name "exchangeonlineuser4"
+        $user_SecureFromKV = Get-AzKeyVaultSecret -VaultName "kvpowerbilogs" -Name "exchangeonlineuser5"
         #Convert the secure username from the keyvault to plain text, so we can pass it in the credential object
         $User = $user_SecureFromKV.SecretValue | ConvertFrom-SecureString -AsPlainText  
-        $PWord = Get-AzKeyVaultSecret -VaultName "kvpowerbilogs" -Name "exchangeonlinepassword"
+        $PWord = Get-AzKeyVaultSecret -VaultName "kvpowerbilogs" -Name "exchangeonlinepassword2"
         # Check the value with following command, this only works from Powershell 7 and up.
         #$password.SecretValue | ConvertFrom-SecureString -AsPlainText  
         
         #Create the credential from the keyvault username and password
         $UserCredential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, $PWord.SecretValue
-        Connect-ExchangeOnline -Credential $UserCredential -ShowBanner:$false -ExchangeEnvironmentName O365Default
+        Connect-ExchangeOnline -Credential $UserCredential -ShowBanner:$false -ExchangeEnvironmentName O365Default 
         
 
 
@@ -126,17 +119,19 @@ function Search-Log {
         
         Write-Output (" writing to file {0}" -f $TempFileName)
         $data | Export-csv -Path $TempFileName -Delimiter ';' -NoTypeInformation
+        Disconnect-ExchangeOnline -Confirm:$false -InformationAction Ignore -ErrorAction SilentlyContinue
         
-        $ctx = New-AzStorageContext -StorageAccountName $StorageAccountName -StorageAccountKey $StorageAccountKey
-        
+		#$ctx = New-AzStorageContext -StorageAccountName $StorageAccountName -StorageAccountKey $StorageAccountKey
+        $ctx = New-AzStorageContext -StorageAccountName $StorageAccountName -UseConnectedAccount
+       
         Write-Output (" uploading file {0} to blob storage" -f $TempFileName)
         Set-AzStorageBlobContent -File $TempFileName -Container $ContainerName -Blob $BlobFileName -Force -Context $ctx
         Set-AzStorageBlobContent -File $TempFileName -Container $ArchiveContainerName -Blob $ArchiveBlobFileName -Force -Context $ctx
         
-        Disconnect-ExchangeOnline -Confirm:$false -InformationAction Ignore -ErrorAction SilentlyContinue
+      
     
     }
-
-Search-Log -nbrOfDays 10
+#Search-Log -nbrOfDays 10
+Search-Log -nbrOfDays 1
 
 

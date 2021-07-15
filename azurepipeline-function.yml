@@ -1,0 +1,81 @@
+name: $(BuildID)
+
+trigger:
+  branches:
+    include:
+    - master
+
+  paths:
+    include:
+    - fapowerbilogs/*
+    exclude:
+    - ARMTemplates/*
+    - pipelinetemplates/*
+    - README.md
+
+variables:
+ 
+  - name: PoolName
+    value: 'IaC-PROD'
+
+  - name: AzureServiceConnection_PROD
+    value: 'awe-in-spn-devops4infra'
+
+  - name: AzureServiceConnection_ACC
+    value: 'awe-acc-spn-devops4infra'
+
+  - name: AzureServiceConnection_TEST
+    value: 'awe-tin-spn-devops4infra'
+
+  - name: FunctionAppName_TEST
+    value: 'awe-tin-azf-powerbiextractauditlogs-01'
+
+  - name: FunctionAppName_ACC
+    value: 'awe-acc-azf-powerbiextractauditlogs-01'
+
+  - name: FunctionAppName_PROD
+    value: 'awe-in-azf-powerbiextractauditlogs-01'
+
+  - name: FunctionAppShortName
+    value: 'powerbeextractauditlogs-01'
+
+stages:
+# test stage
+  - stage: 'deploy_functions_test'
+    displayName: 'Release Powershell Functions Test'
+    
+    jobs:
+    - template: pipelinetemplates/function-template.yml
+      parameters:
+        PoolName: '$(PoolName)'
+        AzureServiceConnection: '$(AzureServiceConnection_TEST)'
+        environment: 'test'
+        FunctionAppName: '$(FunctionAppName_TEST)'
+        FunctionAppShortName: '$(FunctionAppShortName)'
+
+# # acc stage
+#   - stage: 'deploy_functions_acc'
+#     displayName: 'Release Powershell Functions Acceptance'
+#   
+#     jobs:
+#     - template: pipelinetemplates/function-template.yml
+#       parameters:
+#         PoolName: '$(PoolName)'
+#         AzureServiceConnection: '$(AzureServiceConnection_ACC)'
+#         environment: 'acceptance'
+#         FunctionAppName: '$(FunctionAppName_ACC)'
+#         FunctionAppShortName: '$(FunctionAppShortName)'
+
+# # production stage
+#   - stage: 'deploy_functions_production'
+#     displayName: 'Release Powershell Functions Production'
+#    
+#     jobs:
+#     - template: pipelinetemplates/function-template.yml
+#       parameters:
+#         PoolName: '$(PoolName)'
+#         AzureServiceConnection: '$(AzureServiceConnection_PROD)'
+#         environment: 'production'
+#         FunctionAppName: '$(FunctionAppName_PROD)'
+#         FunctionAppShortName: '$(FunctionAppShortName)'
+        

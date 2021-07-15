@@ -1,0 +1,54 @@
+parameters:
+  FunctionAppDescriptiveName: ''
+  PoolName: ''
+  RGName: ''
+  AzureServiceConnection: ''
+  Location: ''
+  environment: ''
+
+
+jobs:
+- deployment: 'validate_armtemplate'
+  displayName: 'Validate ARM template'
+  pool:
+    name: '${{ parameters.PoolName }}'
+  environment: ${{ parameters.environment }}
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - checkout: self
+        
+        - task: AzureResourceGroupDeployment@2
+          displayName: 'Validate Function App ARM Template'
+          inputs:
+            azureSubscription: '${{ parameters.AzureServiceConnection }}'
+            resourceGroupName: ${{ parameters.RGName }}
+            location: '${{ parameters.Location }}'
+            csmFile: 'ARMTemplates/Templates/FA_PowerBiAuditLogs.bicep'
+            csmParametersFile: 'ARMTemplates/Parameters/${{ parameters.environment }}/FA_PowerBiAuditLogs.parameters.json'
+            deploymentMode: Validation
+
+# - deployment: 'release_armtemplate'
+#   dependsOn: 'validate_armtemplate'
+#   displayName: 'Release ARM template'
+#   pool:
+#     name: '${{ parameters.PoolName }}'
+#   environment: ${{ parameters.environment }}
+#   strategy:
+#     runOnce:
+#       deploy:
+#         steps:
+#         - checkout: self
+       
+            
+#         - task: AzureResourceGroupDeployment@2
+#           displayName: 'Release Function App ARM Template'
+#           inputs:
+#             azureSubscription: '${{ parameters.AzureServiceConnection }}'
+#             resourceGroupName: ${{ parameters.RGName }}
+#             location: '${{ parameters.Location }}'
+#             csmFile: 'ARMTemplates/Templates/FA_PowerBiAuditLogs.bicep'
+#             csmParametersFile: 'ARMTemplates/Parameters/${{ parameters.environment }}/FA_PowerBiAuditLogs.parameters.json'
+#             deploymentMode: Incremental
+  
