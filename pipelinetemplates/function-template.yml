@@ -21,14 +21,15 @@ jobs:
         - task: ArchiveFiles@2
           displayName: 'Archiving DeployACIContainer Function'
           inputs:
-            rootFolderOrFile: '${{ parameters.FunctionAppShortName }}/'
+            rootFolderOrFile: '${{ parameters.environment }}-${{ parameters.FunctionAppShortName }}/'
             includeRootFolder: false
             replaceExistingArchive: true
-            archiveFile: '$(System.DefaultWorkingDirectory)/powerbi_function.zip'
+            archiveType: zip
+            archiveFile: '$(System.DefaultWorkingDirectory)/source/powerbi_function.zip'
         - task: AzureFunctionApp@1
           displayName: 'Azure Function App Deploy'
           inputs:
             azureSubscription: '${{ parameters.AzureServiceConnection }}'
             appName: '${{ parameters.FunctionAppName }}'
-            package: '$(System.DefaultWorkingDirectory)/powerbi_function.zip'
+            package: '$(System.DefaultWorkingDirectory)/source/powerbi_function.zip'
             deploymentMode: 'zipDeploy'

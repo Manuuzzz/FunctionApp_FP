@@ -7,7 +7,9 @@ trigger:
 
   paths:
     include:
-    - fapowerbilogs/*
+    - production-powerbiextractauditlogs-01/*
+    - acceptance-powerbiextractauditlogs-01/*
+    - test-powerbiextractauditlogs-01/*
     exclude:
     - ARMTemplates/*
     - pipelinetemplates/*
@@ -16,28 +18,28 @@ trigger:
 variables:
  
   - name: PoolName
-    value: 'IaC-PROD'
+    value: IaC-PRD-VMSS
 
   - name: AzureServiceConnection_PROD
-    value: 'awe-in-spn-devops4infra'
+    value: awe-in-spn-devops4infra
 
   - name: AzureServiceConnection_ACC
-    value: 'awe-acc-spn-devops4infra'
+    value: awe-acc-spn-devops4infra
 
   - name: AzureServiceConnection_TEST
-    value: 'awe-tin-spn-devops4infra'
+    value: awe-tin-spn-devops4infra
 
   - name: FunctionAppName_TEST
-    value: 'awe-tin-azf-powerbiextractauditlogs-01'
+    value: awe-tin-azf-powerbilogs-01
 
   - name: FunctionAppName_ACC
-    value: 'awe-acc-azf-powerbiextractauditlogs-01'
+    value: awe-acc-azf-powerbilogs-01
 
   - name: FunctionAppName_PROD
-    value: 'awe-in-azf-powerbiextractauditlogs-01'
+    value: awe-in-azf-powerbilogs-01
 
   - name: FunctionAppShortName
-    value: 'powerbeextractauditlogs-01'
+    value: powerbiextractauditlogs-01
 
 stages:
 # test stage

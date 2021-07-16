@@ -5,14 +5,15 @@
 param location string
 param environment string
 param umi string
-param tenantId string
 param kv object
 param sta object
 param fa object
 param functionAppPlanName string
-param subscriptionId string
 param rg_functionAppPlan string
 var resourceGroupName = resourceGroup().name
+
+var subscriptionId = subscription().subscriptionId
+var tenantId = subscription().tenantId
 
 var envShort = {
   'Test': 'tin'
@@ -44,12 +45,13 @@ resource r_keyVault 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
   location: location
   
   properties: {
+
     tenantId: tenantId
     sku: {
       family: kv.skuFamily
       name: kv.skuName
     }
-      
+    
     enabledForDeployment: kv.enabledForDeployment
     enabledForDiskEncryption: kv.enabledForDiskEncryption
     enabledForTemplateDeployment: kv.enabledForTemplateDeployment
@@ -163,6 +165,7 @@ resource r_roleAssignmentStorageAccount 'Microsoft.Authorization/roleAssignments
 
 resource r_functionAppPlan 'Microsoft.Web/serverfarms@2021-01-01' existing = {
   name: functionAppPlanName
+  scope: resourceGroup(rg_functionAppPlan)
 }
 
 resource r_functionApp 'Microsoft.Web/sites@2020-06-01' =  {
@@ -184,7 +187,7 @@ resource r_functionApp 'Microsoft.Web/sites@2020-06-01' =  {
     properties:{
     enabled: fa.enabled
     containerSize: fa.containerSize
-    serverFarmId:resourceId(rg_functionAppPlan,'Microsoft.Web/serverFarms',functionAppPlanName)
+    serverFarmId: r_functionAppPlan.id
    
     siteConfig:{
       appSettings: [

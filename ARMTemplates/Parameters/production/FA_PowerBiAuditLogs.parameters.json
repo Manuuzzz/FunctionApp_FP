@@ -3,12 +3,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "subscriptionId": {
-            "value": "ee1ef246-7de7-467c-bc03-06f8c2d826bd"
-        },
-        "tenantId": {
-            "value": "7102d636-1f2c-4449-9404-79ff05fac66c"
-        },
+       
         "environment": {
             "value": "Production"
         },
@@ -34,7 +29,7 @@
                 {
                     "skuName": "standard",
                     "skuFamily": "A",
-                    "enabledForDeployment": false,
+                    "enabledForDeployment": true,
                     "enabledForDiskEncryption": false,
                     "enabledForTemplateDeployment": true,
                     "enableSoftDelete": true,
@@ -70,7 +65,7 @@
                 "fa": {
                     "value":
                         {
-                            "functionAppName": "awe-in-azf-powerbiextractauditlogs-01",
+                            "functionAppName": "awe-in-azf-powerbilogs-01",
                             "kind": "functionapp",
                             "enabled": true,
                             "containerSize": "1536"

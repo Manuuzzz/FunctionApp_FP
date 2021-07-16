@@ -19,36 +19,34 @@ jobs:
         steps:
         - checkout: self
         
-        - task: AzureResourceGroupDeployment@2
-          displayName: 'Validate Function App ARM Template'
+        - task: AzureCLI@2
           inputs:
             azureSubscription: '${{ parameters.AzureServiceConnection }}'
-            resourceGroupName: ${{ parameters.RGName }}
-            location: '${{ parameters.Location }}'
-            csmFile: 'ARMTemplates/Templates/FA_PowerBiAuditLogs.bicep'
-            csmParametersFile: 'ARMTemplates/Parameters/${{ parameters.environment }}/FA_PowerBiAuditLogs.parameters.json'
-            deploymentMode: Validation
+            scriptType: bash
+            scriptLocation: inlineScript
+            inlineScript: |
+              az --version
+              az group create --name ${{ parameters.RGName }} --location ${{ parameters.Location }}
+              az deployment group validate --resource-group ${{ parameters.RGName }} --template-file 'ARMTemplates/Templates/FA_PowerBiAuditLogs.bicep' --parameters 'ARMTemplates/Parameters/${{ parameters.environment }}/FA_PowerBiAuditLogs.parameters.json'
 
-# - deployment: 'release_armtemplate'
-#   dependsOn: 'validate_armtemplate'
-#   displayName: 'Release ARM template'
-#   pool:
-#     name: '${{ parameters.PoolName }}'
-#   environment: ${{ parameters.environment }}
-#   strategy:
-#     runOnce:
-#       deploy:
-#         steps:
-#         - checkout: self
-       
-            
-#         - task: AzureResourceGroupDeployment@2
-#           displayName: 'Release Function App ARM Template'
-#           inputs:
-#             azureSubscription: '${{ parameters.AzureServiceConnection }}'
-#             resourceGroupName: ${{ parameters.RGName }}
-#             location: '${{ parameters.Location }}'
-#             csmFile: 'ARMTemplates/Templates/FA_PowerBiAuditLogs.bicep'
-#             csmParametersFile: 'ARMTemplates/Parameters/${{ parameters.environment }}/FA_PowerBiAuditLogs.parameters.json'
-#             deploymentMode: Incremental
-  
+- deployment: 'release_armtemplate'
+  dependsOn: 'validate_armtemplate'
+  displayName: 'Release ARM template'
+  pool:
+    name: '${{ parameters.PoolName }}'
+  environment: ${{ parameters.environment }}
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - checkout: self
+        
+        - task: AzureCLI@2
+          inputs:
+            azureSubscription: '${{ parameters.AzureServiceConnection }}'
+            scriptType: bash
+            scriptLocation: inlineScript
+            inlineScript: |
+              az --version
+              az group create --name ${{ parameters.RGName }} --location ${{ parameters.Location }}
+              az deployment group create --resource-group ${{ parameters.RGName }} --template-file 'ARMTemplates/Templates/FA_PowerBiAuditLogs.bicep' --parameters 'ARMTemplates/Parameters/${{ parameters.environment }}/FA_PowerBiAuditLogs.parameters.json' --mode Incremental

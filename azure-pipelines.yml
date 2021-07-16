@@ -5,13 +5,13 @@ variables:
     value: powerbeextractauditlogs-01
 
   - name: AzureServiceConnection_PROD
-    value: 'awe-in-spn-devops4infra'
+    value: awe-in-spn-devops4infra
 
   - name: AzureServiceConnection_ACC
-    value: 'awe-acc-spn-devops4infra'
+    value: awe-acc-spn-devops4infra
 
   - name: AzureServiceConnection_TEST
-    value: 'awe-tin-spn-devops4infra'
+    value: awe-tin-spn-devops4infra
 
   - name: RGName_TEST
     value: awe-tin-rg-bi-01
@@ -26,7 +26,7 @@ variables:
     value: westeurope
 
   - name: PoolName
-    value: IaC-PROD
+    value: IaC-PRD-VMSS
 
 trigger:
   branches:

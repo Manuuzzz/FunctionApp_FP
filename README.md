@@ -1,5 +1,11 @@
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+makesure the spn from the serviceconnection has the user admin permissions to assign authorizations
+
+You have to manually create the secrets in the keyvault:
+exchangeonlineuser: see passwordstate
+exchangeonlinepassword: see passwordstate
+
+You also have to edit the powershellscript with the correct keyvaultname depending on the environment
 
 # Getting Started
 TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
