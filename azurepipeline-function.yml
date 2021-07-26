@@ -7,9 +7,8 @@ trigger:
 
   paths:
     include:
-    - production-powerbiextractauditlogs-01/*
-    - acceptance-powerbiextractauditlogs-01/*
-    - test-powerbiextractauditlogs-01/*
+    - powerbiextractauditlogs-01/*
+    
     exclude:
     - ARMTemplates/*
     - pipelinetemplates/*
@@ -45,7 +44,6 @@ stages:
 # test stage
   - stage: 'deploy_functions_test'
     displayName: 'Release Powershell Functions Test'
-    
     jobs:
     - template: pipelinetemplates/function-template.yml
       parameters:
@@ -55,7 +53,20 @@ stages:
         FunctionAppName: '$(FunctionAppName_TEST)'
         FunctionAppShortName: '$(FunctionAppShortName)'
 
-# # acc stage
+# # production stage
+  # - stage: 'deploy_functions_production'
+  #   displayName: 'Release Powershell Functions Production'
+    
+  #   jobs:
+  #   - template: pipelinetemplates/function-template.yml
+  #     parameters:
+  #       PoolName: '$(PoolName)'
+  #       AzureServiceConnection: '$(AzureServiceConnection_PROD)'
+  #       environment: 'production'
+  #       FunctionAppName: '$(FunctionAppName_PROD)'
+  #       FunctionAppShortName: '$(FunctionAppShortName)'
+
+        # # acc stage
 #   - stage: 'deploy_functions_acc'
 #     displayName: 'Release Powershell Functions Acceptance'
 #   
@@ -66,18 +77,4 @@ stages:
 #         AzureServiceConnection: '$(AzureServiceConnection_ACC)'
 #         environment: 'acceptance'
 #         FunctionAppName: '$(FunctionAppName_ACC)'
-#         FunctionAppShortName: '$(FunctionAppShortName)'
-
-# # production stage
-#   - stage: 'deploy_functions_production'
-#     displayName: 'Release Powershell Functions Production'
-#    
-#     jobs:
-#     - template: pipelinetemplates/function-template.yml
-#       parameters:
-#         PoolName: '$(PoolName)'
-#         AzureServiceConnection: '$(AzureServiceConnection_PROD)'
-#         environment: 'production'
-#         FunctionAppName: '$(FunctionAppName_PROD)'
-#         FunctionAppShortName: '$(FunctionAppShortName)'
-        
+#         FunctionAppShortName: '$(FunctionAppShortName)

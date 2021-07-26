@@ -21,7 +21,7 @@ jobs:
         - task: ArchiveFiles@2
           displayName: 'Archiving DeployACIContainer Function'
           inputs:
-            rootFolderOrFile: '${{ parameters.environment }}-${{ parameters.FunctionAppShortName }}/'
+            rootFolderOrFile: '${{ parameters.FunctionAppShortName }}/'
             includeRootFolder: false
             replaceExistingArchive: true
             archiveType: zip

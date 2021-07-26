@@ -16,7 +16,7 @@
         },
 
         "umi": {
-            "value": "powerbeextractauditlogs"
+            "value": "powerbiextractauditlogs"
             
         },
         "rg_functionAppPlan": {

@@ -57,20 +57,6 @@ stages:
       environment: 'test'
 
 
-# # acc stage
-# - stage: 'armtemplate_acc'
-#   displayName: 'ARM Template ACC'
-
-#   jobs:
-#   - template: pipelinetemplates/functionapparm-template.yml
-#     parameters:
-#       FunctionAppDescriptiveName: '$(FunctionAppDescriptiveName)'
-#       PoolName: '$(PoolName)'
-#       RGName: '$(RGName_ACC)'
-#       AzureServiceConnection: '$(AzureServiceConnection_ACC)'
-#       Location: '$(Location)'
-#       environment: 'acceptance'
-
 # # production stage
 # - stage: 'armtemplate_prd'
 #   displayName: 'Validate ARM Template PRD'
@@ -85,3 +71,18 @@ stages:
 #       Location: '$(Location)'
 #       environment: 'production'
 
+
+
+# # acc stage
+# - stage: 'armtemplate_acc'
+#   displayName: 'ARM Template ACC'
+
+#   jobs:
+#   - template: pipelinetemplates/functionapparm-template.yml
+#     parameters:
+#       FunctionAppDescriptiveName: '$(FunctionAppDescriptiveName)'
+#       PoolName: '$(PoolName)'
+#       RGName: '$(RGName_ACC)'
+#       AzureServiceConnection: '$(AzureServiceConnection_ACC)'
+#       Location: '$(Location)'
+#       environment: 'acceptance'

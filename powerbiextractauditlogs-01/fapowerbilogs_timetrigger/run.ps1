@@ -28,10 +28,10 @@ function Search-Log {
         $BlobArchivePath = "local/archivePowerBIAudit/"
     
         $FileName = "PowerBIAudit" 
-        #$TempDir = $Env:temp + "/"
+        $TempDir = $env:TEMP + "/"
         
-        #$TempFileName = $TempDir  + $FileName + ".csv"
-        $TempFileName = $FileName + ".csv"
+        $TempFileName = $TempDir  + $FileName + ".csv"
+        #$TempFileName = $FileName + ".csv"
         $BlobFileName = $BlobPath + $FileName + ".csv"
         
         if (-not $startDate){
@@ -53,10 +53,10 @@ function Search-Log {
         $sessionName = (get-date -Format 'u')+'pbiauditlog'
         
                 
-        $user_SecureFromKV = Get-AzKeyVaultSecret -VaultName "awe-acc-kv-bi-02" -Name "exchangeonlineuser"
+        $user_SecureFromKV = Get-AzKeyVaultSecret -VaultName "awe-tin-kv-bi-02" -Name "exchangeonlineuser"
         #Convert the secure username from the keyvault to plain text, so we can pass it in the credential object
         $User = $user_SecureFromKV.SecretValue | ConvertFrom-SecureString -AsPlainText  
-        $PWord = Get-AzKeyVaultSecret -VaultName "awe-acc-kv-bi-02" -Name "exchangeonlinepassword"
+        $PWord = Get-AzKeyVaultSecret -VaultName "awe-tin-kv-bi-02" -Name "exchangeonlinepassword"
         # Check the value with following command, this only works from Powershell 7 and up.
         #$password.SecretValue | ConvertFrom-SecureString -AsPlainText  
         

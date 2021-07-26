@@ -12,6 +12,7 @@ param functionAppPlanName string
 param rg_functionAppPlan string
 var resourceGroupName = resourceGroup().name
 
+
 var subscriptionId = subscription().subscriptionId
 var tenantId = subscription().tenantId
 
@@ -66,12 +67,12 @@ resource r_roleAssignmentKeyVault 'Microsoft.Authorization/roleAssignments@2020-
   dependsOn: [
     r_keyVault
   ]
-  name: guid(r_userManagedIdentity.id, '/subscriptions/${subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/4633458b-17de-408a-b874-0445c86b69e6', resourceGroup().id)
+  name: guid(r_userManagedIdentity.id, '/subscriptions/${subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/00482a5a-887f-4fb3-b363-3b7fe8e74483', resourceGroup().id)
   scope: r_keyVault
   properties: {
     principalType: 'ServicePrincipal'
     principalId: r_userManagedIdentity.properties.principalId
-    roleDefinitionId: '/subscriptions/${subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/4633458b-17de-408a-b874-0445c86b69e6'
+    roleDefinitionId: '/subscriptions/${subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/00482a5a-887f-4fb3-b363-3b7fe8e74483'
   }
   
 }
@@ -106,6 +107,20 @@ resource r_storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
      }
   }
 }
+
+resource r_fileshareservice 'Microsoft.Storage/storageAccounts/fileServices@2021-04-01' = {
+  dependsOn: [
+    r_storageAccount
+    ]
+  name: '${storageAccountName}/default'
+  properties: {
+      shareDeleteRetentionPolicy: {
+      enabled: false
+      days: 0
+    }
+  }
+}
+
 resource r_blobService 'Microsoft.Storage/storageAccounts/blobServices@2021-04-01' = {
     dependsOn: [
       r_storageAccount
@@ -171,6 +186,7 @@ resource r_functionAppPlan 'Microsoft.Web/serverfarms@2021-01-01' existing = {
 resource r_functionApp 'Microsoft.Web/sites@2020-06-01' =  {
   dependsOn:[
     r_userManagedIdentity
+    r_storageAccount
   ]
   name: fa.functionAppName
   location: location
@@ -188,8 +204,9 @@ resource r_functionApp 'Microsoft.Web/sites@2020-06-01' =  {
     enabled: fa.enabled
     containerSize: fa.containerSize
     serverFarmId: r_functionAppPlan.id
-   
+  
     siteConfig:{
+      powerShellVersion: '~7'
       appSettings: [
       {
         name: 'AzureWebJobsStorage'
@@ -200,20 +217,31 @@ resource r_functionApp 'Microsoft.Web/sites@2020-06-01' =  {
         name: 'FUNCTIONS_WORKER_RUNTIME'
         value: 'powershell'
       }
-      {
-          name: 'WEBSITE_NODE_DEFAULT_VERSION'
-          value: '10.14.1'
-      }
+      
       {
           name: 'FUNCTIONS_EXTENSION_VERSION'
           value: '~3'
       }
-              
-      
+               
+      {
+        name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
+        value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};AccountKey=${listKeys(stasid, '2021-04-01').keys[0].value}'
+      }
       {
         name: 'StorageAccountName'
         value: storageAccountName
       }
+
+      {
+        name: 'WEBSITE_RUN_FROM_PACKAGE'
+        value: '1'
+      }
+      {
+        name: 'AZURE_CLIENT_ID'
+        value: r_userManagedIdentity.properties.clientId
+      }
+      
+      
     
      ]
     }
