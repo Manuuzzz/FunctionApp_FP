@@ -59,6 +59,7 @@ resource r_keyVault 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
     enableSoftDelete: kv.enableSoftDelete
     softDeleteRetentionInDays: kv.softDeleteRetentionInDays
     enableRbacAuthorization: kv.enableRbacAuthorization
+    enablePurgeProtection: kv.enablePurgeProtection
   }
   
 }

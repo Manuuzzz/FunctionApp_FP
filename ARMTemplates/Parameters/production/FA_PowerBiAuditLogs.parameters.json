@@ -34,7 +34,8 @@
                     "enabledForTemplateDeployment": true,
                     "enableSoftDelete": true,
                     "softDeleteRetentionInDays": 90,
-                    "enableRbacAuthorization": true
+                    "enableRbacAuthorization": true,
+                    "enablePurgeProtection": true
                 }
             },
             "sta": {
